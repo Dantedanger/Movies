@@ -29,14 +29,7 @@ class OmbdFetchr {
                 .build()
         omdbApi = retrofit.create(OmdbApi::class.java)
     }
-    fun fetchPhotosRequest():
-            Call<OmdbResponse> {
-        return omdbApi.fetchMovies()
-    }
 
-    fun fetchMovies(): LiveData<List<GalleryItem>> {
-        return fetchMovieMetadata(fetchPhotosRequest())
-    }
     fun searchMoviesRequest(query: String):
             Call<OmdbResponse> {
         return omdbApi.searchMovies(query)

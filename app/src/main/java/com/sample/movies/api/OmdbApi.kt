@@ -7,6 +7,6 @@ import retrofit2.http.Query
 import retrofit2.http.Url
 
 interface OmdbApi {
-    @GET("?=flickr.photos.search")
+    @GET("?t=")
     fun searchMovies(@Query("text") query: String): Call<OmdbResponse>
 }
