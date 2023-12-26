@@ -7,18 +7,27 @@ import android.os.Bundle
 import androidx.lifecycle.ViewModelProviders
 
 private const val TAG = "SearchActivity"
-class SearchActivity : AppCompatActivity(){
+class SearchActivity : AppCompatActivity(), SearchFragment.Callbacks{
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
-//        val isFragmentContainerEmpty =
-//            savedInstanceState == null
-//        if (isFragmentContainerEmpty) {
-//            supportFragmentManager
-//                .beginTransaction()
-//                .add(R.id.fragmentContainer, MovieGalleryFragment.newInstance())
-//                .commit()
-//        }
+        val isFragmentContainerEmpty =
+            savedInstanceState == null
+        if (isFragmentContainerEmpty) {
+            supportFragmentManager
+                .beginTransaction()
+                .add(R.id.searchFragmentContainer, SearchFragment.newInstance())
+                .commit()
+        }
+    }
+    override fun onSelected(galleryItem: GalleryItem){
+        val intent = Intent(this, AddActivity::class.java)
+        intent.putExtra("fragmentToOpen", "lastFragment")
+        intent.putExtra("galleryItemId", galleryItem.id)
+        intent.putExtra("galleryItemUrl", galleryItem.url)
+        intent.putExtra("galleryItemYear", galleryItem.year)
+        intent.putExtra("galleryItemTitle", galleryItem.title)
+        startActivity(intent)
     }
 
     companion object {

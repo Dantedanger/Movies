@@ -2,7 +2,6 @@ package com.sample.movies
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -32,13 +31,20 @@ import com.squareup.picasso.Picasso
 import org.json.JSONObject.NULL
 import java.util.concurrent.TimeUnit
 
-class BeforeAddFragment : Fragment() {
+class AfterAddFragment : Fragment() {
     interface Callbacks {
         fun onSearch()
+        fun onAdd()
     }
+
     private lateinit var titleField: EditText
     private lateinit var dateButton: EditText
     private lateinit var searchButton: Button
+    private lateinit var addButton: Button
+    private lateinit var id: String
+    private lateinit var url: String
+    private lateinit var title: String
+    private lateinit var year: String
     private var callbacks: Callbacks? = null
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -47,6 +53,10 @@ class BeforeAddFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
+        id = arguments?.getString("galleryItemId").toString()
+        url = arguments?.getString("galleryItemUrl").toString()
+        title = arguments?.getString("galleryItemTitle").toString()
+        year = arguments?.getString("galleryItemYear").toString()
     }
     @SuppressLint("MissingInflatedId")
     override fun onCreateView(
@@ -54,12 +64,18 @@ class BeforeAddFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val view = inflater.inflate(R.layout.before_add, container, false)
+        val view = inflater.inflate(R.layout.after_add, container, false)
         titleField = view.findViewById(R.id.movie_title) as EditText
         dateButton = view.findViewById(R.id.year) as EditText
         searchButton = view.findViewById(R.id.search_button) as Button
+        addButton = view.findViewById(R.id.add) as Button
         searchButton.setOnClickListener {
             callbacks?.onSearch()
+        }
+        addButton.setOnClickListener {
+            titleField.setText(title)
+            dateButton.setText(year)
+            callbacks?.onAdd()
         }
         return view
     }

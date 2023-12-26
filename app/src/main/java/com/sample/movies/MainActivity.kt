@@ -27,6 +27,7 @@ class MainActivity : AppCompatActivity(), MovieGalleryFragment.Callbacks  {
         }
         faddist.setOnClickListener {
             val intent = Intent(this, AddActivity::class.java)
+            intent.putExtra("fragmentToOpen", "firstFragment")
             startActivity(intent)
         }
     }
