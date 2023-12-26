@@ -51,7 +51,7 @@ class SearchFragment : Fragment() {
     ): View {
         val view = inflater.inflate(R.layout.search_recycler, container, false)
         movieRecyclerView = view.findViewById(R.id.movie_recycler_view)
-        movieRecyclerView.layoutManager = GridLayoutManager(context, 3)
+        movieRecyclerView.layoutManager = GridLayoutManager(context, 1)
         return view
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -70,32 +70,32 @@ class SearchFragment : Fragment() {
         callbacks = null
     }
 
-    private inner class MovieHolder(view: View, itemImageView: ImageView) : RecyclerView.ViewHolder(view), View.OnClickListener {
+    private inner class MovieHolder(view: View) : RecyclerView.ViewHolder(view), View.OnClickListener {
         private lateinit var galleryItem: GalleryItem
-        val bindImageView: (ImageView) = itemImageView
+//        val bindImageView: (ImageView) = itemImageView
         private val titleTextView: TextView = itemView.findViewById(R.id.movie_title)
         private val dateTextView: TextView = itemView.findViewById(R.id.year)
+        val imageView: ImageView = itemView.findViewById(R.id.imageView)
         init {
             view.setOnClickListener(this)
         }
         fun bind(galleryItem: GalleryItem) {
             this.galleryItem = galleryItem
-            titleTextView.text = this.galleryItem.title
-            dateTextView.text = this.galleryItem.year
+            titleTextView.text = this.galleryItem.Title
+            dateTextView.text = this.galleryItem.Year
         }
         override fun onClick(v: View) {
-            Toast.makeText(
-                context,
-                "Выбран фильм:${galleryItem.title}",
-                Toast.LENGTH_SHORT
-            ).show()
+//            Toast.makeText(
+//                context,
+//                "Выбран фильм:${galleryItem.title}",
+//                Toast.LENGTH_SHORT
+//            ).show()
             callbacks?.onSelected(galleryItem)
         }
     }
 
     private inner class MovieAdapter(private val galleryItems: List<GalleryItem>) : RecyclerView.Adapter<MovieHolder>()  {
 
-        @SuppressLint("ResourceType")
         override fun onCreateViewHolder(
             parent: ViewGroup,
             viewType: Int
@@ -105,20 +105,20 @@ class SearchFragment : Fragment() {
                 parent,
                 false
             ) as View
-            val imageView = layoutInflater.inflate(
-                R.id.imageView,
-                parent,
-                false
-            ) as ImageView
-            return MovieHolder(view,imageView)
+//            val imageView = layoutInflater.inflate(
+//                R.id.imageView,
+//                parent,
+//                false
+//            ) as ImageView
+            return MovieHolder(view)
         }
         override fun getItemCount(): Int = galleryItems.size
         override fun onBindViewHolder(holder: MovieHolder, position: Int) {
             val galleryItem = galleryItems[position]
             Picasso.get()
-                .load(galleryItem.url)
+                .load(galleryItem.Poster)
                 .placeholder(R.drawable.bill_up_close)
-                .into(holder.bindImageView)
+                .into(holder.imageView)
             holder.bind(galleryItem)
         }
     }

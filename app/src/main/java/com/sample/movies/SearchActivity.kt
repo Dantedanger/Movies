@@ -24,10 +24,10 @@ class SearchActivity : AppCompatActivity(), SearchFragment.Callbacks{
     override fun onSelected(galleryItem: GalleryItem){
         val intent = Intent(this, AddActivity::class.java)
         intent.putExtra("fragmentToOpen", "lastFragment")
-        intent.putExtra("galleryItemId", galleryItem.id)
-        intent.putExtra("galleryItemUrl", galleryItem.url)
-        intent.putExtra("galleryItemYear", galleryItem.year)
-        intent.putExtra("galleryItemTitle", galleryItem.title)
+//        intent.putExtra("galleryItemId", galleryItem.id)
+//        intent.putExtra("galleryItemUrl", galleryItem.url)
+//        intent.putExtra("galleryItemYear", galleryItem.year)
+//        intent.putExtra("galleryItemTitle", galleryItem.title)
         startActivity(intent)
     }
 

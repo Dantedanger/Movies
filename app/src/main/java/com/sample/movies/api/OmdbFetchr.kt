@@ -23,7 +23,7 @@ class OmbdFetchr {
             .build()
         val retrofit: Retrofit =
             Retrofit.Builder()
-                .baseUrl("http://www.omdbapi.com/")
+                .baseUrl("https://www.omdbapi.com/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(client)
                 .build()
@@ -41,8 +41,7 @@ class OmbdFetchr {
 
     private fun fetchMovieMetadata(omdbRequest: Call<OmdbResponse>)
             : LiveData<List<GalleryItem>> {
-        val responseLiveData:
-                MutableLiveData<List<GalleryItem>> = MutableLiveData()
+        val responseLiveData: MutableLiveData<List<GalleryItem>> = MutableLiveData()
         omdbRequest.enqueue(object :
             Callback<OmdbResponse> {
             override fun onFailure(call: Call<OmdbResponse>, t: Throwable) {
@@ -53,19 +52,28 @@ class OmbdFetchr {
                 response: Response<OmdbResponse>
             ) {
                 Log.d(TAG, "Response received")
-                val omdbResponse:
-                        OmdbResponse? = response.body()
-                val movieResponse:
-                        MovieResponse? = omdbResponse?.movies
-                var galleryItems:
-                        List<GalleryItem> = movieResponse?.galleryItems
-                    ?: mutableListOf()
-                galleryItems =
-                    galleryItems.filterNot {
-                        it.url.isBlank()
-                    }
-                responseLiveData.value =
-                    galleryItems
+//                val omdbResponse:
+//                        OmdbResponse? = response.body()
+//                val movieResponse:
+//                        MovieResponse? = omdbResponse?.Search
+                val omdbResponse: OmdbResponse? = response.body()
+                val movieItems: List<MovieItem>? = omdbResponse?.Search
+
+                val galleryItems: List<GalleryItem> = movieItems?.map {
+                    GalleryItem(it.Title, it.imdbID, it.Poster, it.Type, it.Year)
+                }.orEmpty().filterNot {
+                    it.Poster.isBlank()
+                }
+                responseLiveData.value = galleryItems
+//                var galleryItems:
+//                        List<GalleryItem> = movieResponse?.galleryItems
+//                    ?: mutableListOf()
+//                galleryItems =
+//                    galleryItems.filterNot {
+//                        it.url.isBlank()
+//                    }
+//                responseLiveData.value =
+//                    galleryItems
             }
         })
         return responseLiveData
