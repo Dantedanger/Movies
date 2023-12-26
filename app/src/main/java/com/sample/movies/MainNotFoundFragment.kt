@@ -12,15 +12,6 @@ import android.view.ViewGroup
 import android.widget.Toast
 
 class MainNotFoundFragment : Fragment() {
-    interface Callbacks {
-        fun onDeleteSelected()
-    }
-
-    private var callbacks: Callbacks? = null
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        callbacks = context as Callbacks?
-    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
@@ -33,10 +24,6 @@ class MainNotFoundFragment : Fragment() {
         return inflater.inflate(R.layout.main_not_movie, container, false)
     }
 
-    override fun onDetach() {
-        super.onDetach()
-        callbacks = null
-    }
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.main_menu, menu)

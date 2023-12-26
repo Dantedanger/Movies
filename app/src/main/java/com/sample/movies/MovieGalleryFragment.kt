@@ -66,8 +66,12 @@ class MovieGalleryFragment : Fragment() {
             Observer { items ->
                 items?.let {
                     movieRecyclerView.adapter = MovieAdapter(items)
+                    if (items.isEmpty()) {
+                        callbacks?.noItems()
+                    }
                 }
             })
+
     }
     override fun onDetach() {
         super.onDetach()
@@ -92,9 +96,6 @@ class MovieGalleryFragment : Fragment() {
             }
         }
     }
-    private fun getItems(items: List<Item>): List<Item> {
-        return items
-    }
 
     private inner class MovieAdapter(private val items: List<Item>) : RecyclerView.Adapter<MovieHolder>()  {
 
@@ -111,9 +112,6 @@ class MovieGalleryFragment : Fragment() {
         }
         override fun getItemCount(): Int = items.size
         override fun onBindViewHolder(holder: MovieHolder, position: Int) {
-            if (items == NULL) {
-                callbacks?.noItems()
-            }
             val item = items[position]
             holder.bind(item)
         }
@@ -138,7 +136,7 @@ class MovieGalleryFragment : Fragment() {
         }
     }
 
-    fun onDeleteSelected() {
+    private fun onDeleteSelected() {
         movieGalleryViewModel.deleteMovie()
     }
 
