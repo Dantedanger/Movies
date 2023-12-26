@@ -33,7 +33,7 @@ import java.util.concurrent.TimeUnit
 
 class AfterAddFragment : Fragment() {
     interface Callbacks {
-        fun onSearch()
+        fun onSearch(title:String,year:String)
         fun onAdd()
     }
 
@@ -70,7 +70,7 @@ class AfterAddFragment : Fragment() {
         searchButton = view.findViewById(R.id.search_button) as Button
         addButton = view.findViewById(R.id.add) as Button
         searchButton.setOnClickListener {
-            callbacks?.onSearch()
+            callbacks?.onSearch(titleField.text.toString(),dateButton.text.toString())
         }
         addButton.setOnClickListener {
             titleField.setText(title)

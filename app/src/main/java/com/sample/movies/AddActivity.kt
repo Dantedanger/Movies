@@ -45,8 +45,10 @@ class AddActivity : AppCompatActivity(), BeforeAddFragment.Callbacks, AfterAddFr
             }
         }
     }
-    override fun onSearch() {
+    override fun onSearch(title: String,year: String) {
         val intent = Intent(this, SearchActivity::class.java)
+        intent.putExtra("addgalleryItemYear", year)
+        intent.putExtra("addgalleryItemTitle", title)
         startActivity(intent)
     }
     override fun onAdd() {

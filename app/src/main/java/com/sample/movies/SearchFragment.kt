@@ -3,18 +3,12 @@ package com.sample.movies
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -44,8 +38,11 @@ class SearchFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
+        val title = arguments?.getString("addgalleryItemTitle")
+        val year = arguments?.getString("addgalleryItemYear")
         movieGalleryViewModel =
             ViewModelProviders.of(this).get(MovieGalleryViewModel::class.java)
+        movieGalleryViewModel.fetchMovies(title.toString())
     }
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -127,6 +124,13 @@ class SearchFragment : Fragment() {
     }
 
     companion object {
-        fun newInstance() = SearchFragment()
+        fun newInstance(title: String, year: String?): SearchFragment {
+            val fragment = SearchFragment()
+            val args = Bundle()
+            args.putString("addgalleryItemTitle", title)
+            args.putString("addgalleryItemYear", year)
+            fragment.arguments = args
+            return fragment
+        }
     }
 }
