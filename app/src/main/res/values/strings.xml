@@ -4,4 +4,6 @@
     <string name="delete">Delete Movies</string>
     <string name="no_movies">No Movies in your list. Tap the button below to get start</string>
     <string name="delete_movies_from_database_success">Movies deleted</string>
+    <string name="delete_movies_from_database_already">Movies not found</string>
+
 </resources>

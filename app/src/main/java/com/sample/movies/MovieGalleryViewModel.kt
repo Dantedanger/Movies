@@ -29,7 +29,7 @@ class MovieGalleryViewModel(private val app: Application
         mutableSearchTerm.value = query
     }
 
-    fun deleteMovie(){
-        galleryRepository.deleteMovie(item.id)
+    fun deleteMovie() {
+        galleryRepository.deleteMovie()
     }
 }

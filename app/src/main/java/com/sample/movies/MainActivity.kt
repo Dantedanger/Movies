@@ -17,13 +17,18 @@ class MainActivity : AppCompatActivity(), MovieGalleryFragment.Callbacks  {
         if (isFragmentContainerEmpty) {
             supportFragmentManager
                 .beginTransaction()
-                .add(R.id.fragmentContainer, MovieGalleryFragment.newInstance())
+                .add(R.id.fragmentContainerMain, MovieGalleryFragment.newInstance())
                 .commit()
         }
     }
-    override fun onDeleteSelected()
+    override fun noItems()
     {
-        movieGalleryViewModel.deleteMovie()
+        val fragment = MainNotFoundFragment()
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.fragmentContainerMain, fragment)
+            .addToBackStack(null)
+            .commit()
     }
 
     companion object {

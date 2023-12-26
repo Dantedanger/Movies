@@ -14,8 +14,8 @@ interface GalleryDao {
     @Insert
     fun addmovie(item: Item)
 
-    @Query("DELETE FROM gallery WHERE id=(:id)")
-    fun deletemovie(id: String)
+    @Query("DELETE FROM gallery WHERE `delete` = 1")
+    fun deletemovie()
 
     @Query("SELECT * FROM gallery WHERE id=(:id)")
     fun getmovie(id: String): Item?

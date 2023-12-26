@@ -9,7 +9,9 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CheckBox
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
@@ -23,6 +25,7 @@ import androidx.work.NetworkType
 import androidx.work.PeriodicWorkRequest
 import androidx.work.WorkManager
 import com.squareup.picasso.Picasso
+import org.json.JSONObject.NULL
 import java.util.concurrent.TimeUnit
 
 class MovieGalleryFragment : Fragment() {
@@ -30,7 +33,7 @@ class MovieGalleryFragment : Fragment() {
      * Требуемый интерфейс
      */
     interface Callbacks {
-        fun onDeleteSelected()
+        fun noItems()
     }
 
     private var callbacks: Callbacks? = null
@@ -56,14 +59,14 @@ class MovieGalleryFragment : Fragment() {
         movieRecyclerView.layoutManager = GridLayoutManager(context, 3)
         return view
     }
-    override fun onViewCreated(view: View,
-                               savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         movieGalleryViewModel.itemLiveData.observe(
             viewLifecycleOwner,
             Observer { items ->
-                movieRecyclerView.adapter =
-                    MovieAdapter(items)
+                items?.let {
+                    movieRecyclerView.adapter = MovieAdapter(items)
+                }
             })
     }
     override fun onDetach() {
@@ -71,23 +74,29 @@ class MovieGalleryFragment : Fragment() {
         callbacks = null
     }
 
-    private inner class MovieHolder(view: View) : RecyclerView.ViewHolder(view), View.OnClickListener {
-        val bindView: (View) = view
+    private inner class MovieHolder(view: View) : RecyclerView.ViewHolder(view) {
         private lateinit var item: Item
+        private val titleTextView: TextView = itemView.findViewById(R.id.movie_title)
+        private val dateTextView: TextView = itemView.findViewById(R.id.year)
+        //val imageView: ImageView = itemView.findViewById(R.id.imageView)
+        private val solvedCheckBox: CheckBox = view.findViewById(R.id.checkBox)
         init {
 
         }
         fun bind(item: Item) {
             this.item = item
-        }
-
-        override fun onClick(v: View?) {
-            item.delete = true
+            titleTextView.text = this.item.title
+            dateTextView.text = this.item.year
+            if (solvedCheckBox.isChecked) {
+                this.item.delete = true
+            }
         }
     }
+    private fun getItems(items: List<Item>): List<Item> {
+        return items
+    }
 
-    private inner class MovieAdapter(private val items: List<Item>)
-        : RecyclerView.Adapter<MovieHolder>()  {
+    private inner class MovieAdapter(private val items: List<Item>) : RecyclerView.Adapter<MovieHolder>()  {
 
         override fun onCreateViewHolder(
             parent: ViewGroup,
@@ -97,11 +106,14 @@ class MovieGalleryFragment : Fragment() {
                 R.layout.main_movies_watch,
                 parent,
                 false
-            ) as ImageView
+            ) as View
             return MovieHolder(view)
         }
         override fun getItemCount(): Int = items.size
         override fun onBindViewHolder(holder: MovieHolder, position: Int) {
+            if (items == NULL) {
+                callbacks?.noItems()
+            }
             val item = items[position]
             holder.bind(item)
         }
@@ -113,7 +125,7 @@ class MovieGalleryFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.menu_item_delete_database_movies -> {
-                callbacks?.onDeleteSelected()
+                onDeleteSelected()
                 Toast.makeText(
                     context,
                     R.string.delete_movies_from_database_success,
@@ -125,6 +137,11 @@ class MovieGalleryFragment : Fragment() {
                 super.onOptionsItemSelected(item)
         }
     }
+
+    fun onDeleteSelected() {
+        movieGalleryViewModel.deleteMovie()
+    }
+
 
     companion object {
         fun newInstance() = MovieGalleryFragment()
