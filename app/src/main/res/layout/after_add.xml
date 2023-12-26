@@ -9,7 +9,7 @@
     <TextView
         android:id="@+id/movie_title"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="35dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="24dp"
         android:layout_marginEnd="8dp"
@@ -22,9 +22,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <SearchView
-        android:layout_width="20dp"
-        android:layout_height="20dp"
+    <Button
+        style="@style/Widget.AppCompat.Button"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:background="@android:drawable/ic_menu_search"
+        app:layout_constraintBottom_toBottomOf="@+id/movie_title"
         app:layout_constraintEnd_toEndOf="@+id/movie_title"
         app:layout_constraintTop_toTopOf="@+id/movie_title" />
 
