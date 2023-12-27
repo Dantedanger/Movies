@@ -56,7 +56,7 @@ class MovieGalleryFragment : Fragment() {
     ): View {
         val view = inflater.inflate(R.layout.main_recycler, container, false)
         movieRecyclerView = view.findViewById(R.id.main_movie_recycler_view)
-        movieRecyclerView.layoutManager = GridLayoutManager(context, 3)
+        movieRecyclerView.layoutManager = GridLayoutManager(context, 1)
         return view
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -82,7 +82,7 @@ class MovieGalleryFragment : Fragment() {
         private lateinit var item: Item
         private val titleTextView: TextView = itemView.findViewById(R.id.movie_title)
         private val dateTextView: TextView = itemView.findViewById(R.id.year)
-        //val imageView: ImageView = itemView.findViewById(R.id.imageView)
+        val imageView: ImageView = itemView.findViewById(R.id.imageView)
         private val solvedCheckBox: CheckBox = view.findViewById(R.id.checkBox)
         init {
 
@@ -91,6 +91,10 @@ class MovieGalleryFragment : Fragment() {
             this.item = item
             titleTextView.text = this.item.title
             dateTextView.text = this.item.year
+            Picasso.get()
+                .load(item.url)
+                .placeholder(R.drawable.bill_up_close)
+                .into(imageView)
             if (solvedCheckBox.isChecked) {
                 this.item.delete = true
             }
@@ -123,7 +127,7 @@ class MovieGalleryFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.menu_item_delete_database_movies -> {
-                onDeleteSelected()
+                movieGalleryViewModel.deleteMovie()
                 Toast.makeText(
                     context,
                     R.string.delete_movies_from_database_success,
@@ -135,11 +139,6 @@ class MovieGalleryFragment : Fragment() {
                 super.onOptionsItemSelected(item)
         }
     }
-
-    private fun onDeleteSelected() {
-        movieGalleryViewModel.deleteMovie()
-    }
-
 
     companion object {
         fun newInstance() = MovieGalleryFragment()

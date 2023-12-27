@@ -23,7 +23,7 @@ class GalleryRepository private constructor(context: Context) {
     fun getMovies(): LiveData<List<Item>> = database.galleryDao().getmovies()
 
     private fun GalleryItem.toItem(): Item {
-        return Item(Title, Year, Poster, imdbID)
+        return Item(Title, Year, Poster, imdbID, false)
     }
 
     fun addMovie(movie: GalleryItem) {
