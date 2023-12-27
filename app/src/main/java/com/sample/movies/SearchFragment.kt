@@ -43,7 +43,10 @@ class SearchFragment : Fragment() {
         val year = arguments?.getString("addgalleryItemYear")
         movieGalleryViewModel =
             ViewModelProviders.of(this).get(MovieGalleryViewModel::class.java)
-        movieGalleryViewModel.fetchMovies(title.toString())
+        if (year == "null")
+            movieGalleryViewModel.fetchMovies(title.toString())
+        else
+            movieGalleryViewModel.fetchMoviesByYear(title.toString(),year.toString())
     }
     override fun onCreateView(
         inflater: LayoutInflater,

@@ -95,13 +95,7 @@ class MovieGalleryFragment : Fragment() {
         val imageView: ImageView = itemView.findViewById(R.id.imageView)
         private val solvedCheckBox: CheckBox = view.findViewById(R.id.checkBox)
         init {
-            solvedCheckBox.setOnCheckedChangeListener { _, isChecked ->
-                if (isChecked)
-                    this.item.del = 1
-                else
-                    this.item.del = 0
-                Log.d("MovieHolder", "item after: ${item.del}")
-            }
+
         }
         fun bind(item: Item) {
             this.item = item
@@ -111,6 +105,13 @@ class MovieGalleryFragment : Fragment() {
                 .load(item.url)
                 .placeholder(R.drawable.bill_up_close)
                 .into(imageView)
+            solvedCheckBox.setOnCheckedChangeListener { _, isChecked ->
+                if (isChecked)
+                    this.item.del = 1
+                else
+                    this.item.del = 0
+                Log.d("MovieHolder", "item after: ${this.item.del}")
+            }
             if (this.item.del==1) {
                 solvedCheckBox.isChecked = true
             }

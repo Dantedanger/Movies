@@ -14,12 +14,10 @@ import androidx.fragment.app.Fragment
 class BeforeAddFragment : Fragment() {
     interface Callbacks {
         fun onSearch(title: String, year: String)
-        fun onAddBefore()
     }
     private lateinit var titleField: EditText
     private lateinit var dateButton: EditText
     private lateinit var searchButton: Button
-    private lateinit var addButton: Button
     private var callbacks: Callbacks? = null
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -39,12 +37,8 @@ class BeforeAddFragment : Fragment() {
         titleField = view.findViewById(R.id.movie_title) as EditText
         dateButton = view.findViewById(R.id.year) as EditText
         searchButton = view.findViewById(R.id.search_button) as Button
-        addButton = view.findViewById(R.id.button2) as Button
         searchButton.setOnClickListener {
             callbacks?.onSearch(titleField.text.toString(),dateButton.text.toString())
-        }
-        addButton.setOnClickListener {
-            callbacks?.onAddBefore()
         }
         return view
     }

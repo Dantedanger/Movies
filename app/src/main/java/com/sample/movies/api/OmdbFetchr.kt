@@ -34,9 +34,19 @@ class OmbdFetchr {
             Call<OmdbResponse> {
         return omdbApi.searchMovies(query)
     }
+
+    fun searchMoviesRequestByYear(query: String, year: String):
+            Call<OmdbResponse> {
+        return omdbApi.searchMoviesByYear(query,year)
+    }
     fun searchMovies(query: String):
             LiveData<List<GalleryItem>> {
         return fetchMovieMetadata(searchMoviesRequest(query))
+    }
+
+    fun searchMoviesByYear(query: String, year:String):
+            LiveData<List<GalleryItem>> {
+        return fetchMovieMetadata(searchMoviesRequestByYear(query,year))
     }
 
     private fun fetchMovieMetadata(omdbRequest: Call<OmdbResponse>)

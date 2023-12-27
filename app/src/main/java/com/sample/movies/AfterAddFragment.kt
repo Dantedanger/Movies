@@ -87,7 +87,7 @@ class AfterAddFragment : Fragment() {
                 .into(imagePoster)
         }
         addButton.setOnClickListener {
-            var galleryItem = GalleryItem()
+            val galleryItem = GalleryItem()
             galleryItem.imdbID = id
             galleryItem.Title = title
             galleryItem.Year = year

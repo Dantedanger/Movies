@@ -9,4 +9,6 @@ import retrofit2.http.Url
 interface OmdbApi {
     @GET("?")
     fun searchMovies(@Query("s") query: String): Call<OmdbResponse>
+    @GET("?")
+    fun searchMoviesByYear(@Query("s") query: String, @Query("y") year: String): Call<OmdbResponse>
 }
