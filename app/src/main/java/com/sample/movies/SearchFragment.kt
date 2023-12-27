@@ -75,7 +75,8 @@ class SearchFragment : Fragment() {
 //        val bindImageView: (ImageView) = itemImageView
         private val titleTextView: TextView = itemView.findViewById(R.id.movie_title)
         private val dateTextView: TextView = itemView.findViewById(R.id.year)
-        val imageView: ImageView = itemView.findViewById(R.id.imageView)
+        private val genreTextView: TextView = itemView.findViewById(R.id.genre)
+        val imageView: ImageView = itemView.findViewById(R.id.imagePosterView)
         init {
             view.setOnClickListener(this)
         }
@@ -83,6 +84,7 @@ class SearchFragment : Fragment() {
             this.galleryItem = galleryItem
             titleTextView.text = this.galleryItem.Title
             dateTextView.text = this.galleryItem.Year
+            genreTextView.text = this.galleryItem.Type
         }
         override fun onClick(v: View) {
 //            Toast.makeText(

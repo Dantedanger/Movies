@@ -17,7 +17,7 @@
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/year"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/imageView"
+        app:layout_constraintStart_toEndOf="@+id/imagePosterView"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
@@ -31,7 +31,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/imageView"
+        app:layout_constraintStart_toEndOf="@+id/imagePosterView"
         app:layout_constraintTop_toBottomOf="@+id/movie_title" />
 
     <TextView
@@ -49,7 +49,7 @@
         app:layout_constraintTop_toBottomOf="@+id/year" />
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/imagePosterView"
         android:layout_width="84dp"
         android:layout_height="116dp"
         android:layout_marginStart="8dp"

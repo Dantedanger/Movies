@@ -21,6 +21,7 @@ class AddActivity : AppCompatActivity(), BeforeAddFragment.Callbacks, AfterAddFr
 
             val fragment = AfterAddFragment().apply {
                 arguments = Bundle().apply {
+                    putString("Activity", "Search")
                     putString("galleryItemId", id)
                     putString("galleryItemTitle", title)
                     putString("galleryItemUrl", url)
@@ -51,13 +52,16 @@ class AddActivity : AppCompatActivity(), BeforeAddFragment.Callbacks, AfterAddFr
         intent.putExtra("addgalleryItemTitle", title)
         startActivity(intent)
     }
-    override fun onAdd() {
+    override fun onAddBefore() {
         val fragment = AfterAddFragment()
         supportFragmentManager
             .beginTransaction()
             .replace(R.id.fragmentContainerAdd, fragment)
             .addToBackStack(null)
             .commit()
+    }
+    override fun onAdd(galleryItem: GalleryItem) {
+
     }
 
     companion object {

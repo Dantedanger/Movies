@@ -34,13 +34,15 @@ import java.util.concurrent.TimeUnit
 class AfterAddFragment : Fragment() {
     interface Callbacks {
         fun onSearch(title:String,year:String)
-        fun onAdd()
+        fun onAdd(galleryItem: GalleryItem)
     }
 
     private lateinit var titleField: EditText
     private lateinit var dateButton: EditText
+    private lateinit var imagePoster: ImageView
     private lateinit var searchButton: Button
     private lateinit var addButton: Button
+    private lateinit var activ: String
     private lateinit var id: String
     private lateinit var url: String
     private lateinit var title: String
@@ -53,10 +55,13 @@ class AfterAddFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
-        id = arguments?.getString("galleryItemId").toString()
-        url = arguments?.getString("galleryItemUrl").toString()
-        title = arguments?.getString("galleryItemTitle").toString()
-        year = arguments?.getString("galleryItemYear").toString()
+        activ = arguments?.getString("Activity").toString()
+        if (activ=="Search"){
+            id = arguments?.getString("galleryItemId").toString()
+            url = arguments?.getString("galleryItemUrl").toString()
+            title = arguments?.getString("galleryItemTitle").toString()
+            year = arguments?.getString("galleryItemYear").toString()
+        }
     }
     @SuppressLint("MissingInflatedId")
     override fun onCreateView(
@@ -67,15 +72,27 @@ class AfterAddFragment : Fragment() {
         val view = inflater.inflate(R.layout.after_add, container, false)
         titleField = view.findViewById(R.id.movie_title) as EditText
         dateButton = view.findViewById(R.id.year) as EditText
+        imagePoster = view.findViewById(R.id.imageView2) as ImageView
         searchButton = view.findViewById(R.id.search_button) as Button
         addButton = view.findViewById(R.id.add) as Button
         searchButton.setOnClickListener {
             callbacks?.onSearch(titleField.text.toString(),dateButton.text.toString())
         }
-        addButton.setOnClickListener {
+        if (activ=="Search"){
             titleField.setText(title)
             dateButton.setText(year)
-            callbacks?.onAdd()
+            Picasso.get()
+                .load(url)
+                .placeholder(R.drawable.bill_up_close)
+                .into(imagePoster)
+        }
+        addButton.setOnClickListener {
+            var galleryItem = GalleryItem()
+            galleryItem.imdbID = id
+            galleryItem.Title = title
+            galleryItem.Year = year
+            galleryItem.Poster = url
+            callbacks?.onAdd(galleryItem)
         }
         return view
     }
@@ -86,6 +103,6 @@ class AfterAddFragment : Fragment() {
     }
 
     companion object {
-        fun newInstance() = BeforeAddFragment()
+        fun newInstance() = AfterAddFragment()
     }
 }
