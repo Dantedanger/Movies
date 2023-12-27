@@ -7,10 +7,12 @@ import android.os.Bundle
 import androidx.lifecycle.ViewModelProviders
 
 class AddActivity : AppCompatActivity(), BeforeAddFragment.Callbacks, AfterAddFragment.Callbacks {
+    private lateinit var movieGalleryViewModel: MovieGalleryViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add)
 
+        movieGalleryViewModel = ViewModelProviders.of(this).get(MovieGalleryViewModel::class.java)
         val fragmentToOpen = intent.getStringExtra("fragmentToOpen")
 
         if (fragmentToOpen == "lastFragment") {
@@ -61,7 +63,9 @@ class AddActivity : AppCompatActivity(), BeforeAddFragment.Callbacks, AfterAddFr
             .commit()
     }
     override fun onAdd(galleryItem: GalleryItem) {
-
+        val intent = Intent(this, MainActivity::class.java)
+        movieGalleryViewModel.addMovie(galleryItem)
+        startActivity(intent)
     }
 
     companion object {

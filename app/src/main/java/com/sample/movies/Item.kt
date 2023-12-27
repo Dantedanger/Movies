@@ -6,9 +6,9 @@ import com.google.gson.annotations.SerializedName
 @Entity(tableName = "gallery")
 
 data class Item(
-    @PrimaryKey var id: String = "",
     var title: String = "",
     var year: String = "",
-    @SerializedName("i") var url: String = "",
+    var url: String = "",
+    @PrimaryKey var id: String = "",
     var delete: Boolean = false
 )

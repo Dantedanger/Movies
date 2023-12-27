@@ -28,7 +28,9 @@ class MovieGalleryViewModel(private val app: Application
         QueryPreferences.setStoredQuery(app, query)
         mutableSearchTerm.value = query
     }
-
+    fun addMovie(movie: GalleryItem) {
+        galleryRepository.addMovie(movie)
+    }
     fun deleteMovie() {
         galleryRepository.deleteMovie()
     }
