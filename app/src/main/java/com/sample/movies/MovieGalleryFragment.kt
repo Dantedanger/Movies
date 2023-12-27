@@ -1,6 +1,7 @@
 package com.sample.movies
 
 import android.content.Context
+import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -39,6 +40,7 @@ class MovieGalleryFragment : Fragment() {
     private var callbacks: Callbacks? = null
     private lateinit var movieGalleryViewModel: MovieGalleryViewModel
     private lateinit var movieRecyclerView: RecyclerView
+    private var adapter: MovieAdapter? = MovieAdapter(emptyList())
     override fun onAttach(context: Context) {
         super.onAttach(context)
         callbacks = context as Callbacks?
@@ -56,7 +58,9 @@ class MovieGalleryFragment : Fragment() {
     ): View {
         val view = inflater.inflate(R.layout.main_recycler, container, false)
         movieRecyclerView = view.findViewById(R.id.main_movie_recycler_view)
-        movieRecyclerView.layoutManager = GridLayoutManager(context, 1)
+        val orientation = resources.configuration.orientation
+        val spanCount = if (orientation == Configuration.ORIENTATION_LANDSCAPE) 2 else 1
+        movieRecyclerView.layoutManager = GridLayoutManager(context, spanCount)
         return view
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -70,12 +74,18 @@ class MovieGalleryFragment : Fragment() {
                         callbacks?.noItems()
                     }
                 }
+                updateUI(items)
             })
 
     }
     override fun onDetach() {
         super.onDetach()
         callbacks = null
+    }
+
+    private fun updateUI(items: List<Item>) {
+        adapter = MovieAdapter(items)
+        movieRecyclerView.adapter = adapter
     }
 
     private inner class MovieHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -85,7 +95,13 @@ class MovieGalleryFragment : Fragment() {
         val imageView: ImageView = itemView.findViewById(R.id.imageView)
         private val solvedCheckBox: CheckBox = view.findViewById(R.id.checkBox)
         init {
-
+            solvedCheckBox.setOnCheckedChangeListener { _, isChecked ->
+                if (isChecked)
+                    this.item.del = 1
+                else
+                    this.item.del = 0
+                Log.d("MovieHolder", "item after: ${item.del}")
+            }
         }
         fun bind(item: Item) {
             this.item = item
@@ -95,8 +111,8 @@ class MovieGalleryFragment : Fragment() {
                 .load(item.url)
                 .placeholder(R.drawable.bill_up_close)
                 .into(imageView)
-            if (solvedCheckBox.isChecked) {
-                this.item.delete = true
+            if (this.item.del==1) {
+                solvedCheckBox.isChecked = true
             }
         }
     }

@@ -2,6 +2,7 @@ package com.sample.movies
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -51,7 +52,9 @@ class SearchFragment : Fragment() {
     ): View {
         val view = inflater.inflate(R.layout.search_recycler, container, false)
         movieRecyclerView = view.findViewById(R.id.movie_recycler_view)
-        movieRecyclerView.layoutManager = GridLayoutManager(context, 1)
+        val orientation = resources.configuration.orientation
+        val spanCount = if (orientation == Configuration.ORIENTATION_LANDSCAPE) 2 else 1
+        movieRecyclerView.layoutManager = GridLayoutManager(context, spanCount)
         return view
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -72,7 +75,6 @@ class SearchFragment : Fragment() {
 
     private inner class MovieHolder(view: View) : RecyclerView.ViewHolder(view), View.OnClickListener {
         private lateinit var galleryItem: GalleryItem
-//        val bindImageView: (ImageView) = itemImageView
         private val titleTextView: TextView = itemView.findViewById(R.id.movie_title)
         private val dateTextView: TextView = itemView.findViewById(R.id.year)
         private val genreTextView: TextView = itemView.findViewById(R.id.genre)
@@ -87,11 +89,11 @@ class SearchFragment : Fragment() {
             genreTextView.text = this.galleryItem.Type
         }
         override fun onClick(v: View) {
-//            Toast.makeText(
-//                context,
-//                "Выбран фильм:${galleryItem.title}",
-//                Toast.LENGTH_SHORT
-//            ).show()
+            Toast.makeText(
+                context,
+                "Выбран фильм:${galleryItem.Title}",
+                Toast.LENGTH_SHORT
+            ).show()
             callbacks?.onSelected(galleryItem)
         }
     }
@@ -107,11 +109,6 @@ class SearchFragment : Fragment() {
                 parent,
                 false
             ) as View
-//            val imageView = layoutInflater.inflate(
-//                R.id.imageView,
-//                parent,
-//                false
-//            ) as ImageView
             return MovieHolder(view)
         }
         override fun getItemCount(): Int = galleryItems.size
