@@ -9,38 +9,25 @@ import androidx.lifecycle.switchMap
 import com.sample.movies.api.OmbdFetchr
 import org.json.JSONObject.NULL
 
-class MovieGalleryViewModel(private val app: Application
-) : AndroidViewModel(app) {
+class MovieGalleryViewModel(private val app: Application) : AndroidViewModel(app) {
     private val galleryRepository = GalleryRepository.get()
     val galleryItemLiveData: LiveData<List<GalleryItem>>
-    val itemLiveData: LiveData<List<Item>> = galleryRepository.getMovies()
+    var itemLiveData: LiveData<List<Item>> = galleryRepository.getMovies()
 
     private val omdbFetchr = OmbdFetchr()
     private val mutableSearchTerm = MutableLiveData<String>()
-    private val mutableSearchTerms: MutableLiveData<Pair<String, String>> = MutableLiveData()
+    private val mutableSearchTerms = MutableLiveData<Pair<String, String>>()
 
     init {
-        if (QueryPreferences.getStoredQueryByYear(app) == NULL){
-            mutableSearchTerm.value = QueryPreferences.getStoredQuery(app)
-            galleryItemLiveData = mutableSearchTerm.switchMap { searchTerm ->
-                omdbFetchr.searchMovies(searchTerm)
-                }
+        mutableSearchTerms.value = QueryPreferences.getStoredQueryByYear(app)
+        galleryItemLiveData = mutableSearchTerms.switchMap { (searchTerm1, searchTerm2) ->
+            omdbFetchr.searchMoviesByYear(searchTerm1, searchTerm2)
         }
-        else{
-            mutableSearchTerms.value = Pair(QueryPreferences.getStoredQuery(app), QueryPreferences.getStoredQueryByYear(app))
-            galleryItemLiveData = mutableSearchTerms.switchMap { (searchTerm1, searchTerm2) ->
-                omdbFetchr.searchMoviesByYear(searchTerm1, searchTerm2)
-                }
-            }
-        }
-
-    fun fetchMovies(query: String = "") {
-        QueryPreferences.setStoredQuery(app, query)
-        mutableSearchTerm.value = query
     }
+
     fun fetchMoviesByYear(query: String = "", year: String = "") {
-        QueryPreferences.setStoredQuery(app, query)
-        mutableSearchTerm.value = query
+        QueryPreferences.setStoredQueryByYear(app, query, year)
+        mutableSearchTerms.value = Pair(query, year)
     }
     fun addMovie(movie: GalleryItem) {
         galleryRepository.addMovie(movie)

@@ -40,7 +40,6 @@ class MovieGalleryFragment : Fragment() {
     private var callbacks: Callbacks? = null
     private lateinit var movieGalleryViewModel: MovieGalleryViewModel
     private lateinit var movieRecyclerView: RecyclerView
-    private var adapter: MovieAdapter? = MovieAdapter(emptyList())
     override fun onAttach(context: Context) {
         super.onAttach(context)
         callbacks = context as Callbacks?
@@ -69,12 +68,11 @@ class MovieGalleryFragment : Fragment() {
             viewLifecycleOwner,
             Observer { items ->
                 items?.let {
-                    movieRecyclerView.adapter = MovieAdapter(items)
                     if (items.isEmpty()) {
                         callbacks?.noItems()
                     }
                 }
-                updateUI(items)
+                movieRecyclerView.adapter = MovieAdapter(items)
             })
 
     }
@@ -83,19 +81,19 @@ class MovieGalleryFragment : Fragment() {
         callbacks = null
     }
 
-    private fun updateUI(items: List<Item>) {
-        adapter = MovieAdapter(items)
-        movieRecyclerView.adapter = adapter
-    }
 
     private inner class MovieHolder(view: View) : RecyclerView.ViewHolder(view) {
         private lateinit var item: Item
         private val titleTextView: TextView = itemView.findViewById(R.id.movie_title)
         private val dateTextView: TextView = itemView.findViewById(R.id.year)
         val imageView: ImageView = itemView.findViewById(R.id.imageView)
-        private val solvedCheckBox: CheckBox = view.findViewById(R.id.checkBox)
+        private val solvedCheckBox: CheckBox = view.findViewById(R.id.checkSolve)
         init {
-
+            solvedCheckBox.setOnCheckedChangeListener { _, isChecked ->
+                item.del = 1
+                Log.d("MovieHolder", "item after: ${item.title}")
+                Log.d("MovieHolder", "item after: ${item.del}")
+            }
         }
         fun bind(item: Item) {
             this.item = item
@@ -105,15 +103,11 @@ class MovieGalleryFragment : Fragment() {
                 .load(item.url)
                 .placeholder(R.drawable.bill_up_close)
                 .into(imageView)
-            solvedCheckBox.setOnCheckedChangeListener { _, isChecked ->
-                if (isChecked)
-                    this.item.del = 1
-                else
-                    this.item.del = 0
-                Log.d("MovieHolder", "item after: ${this.item.del}")
-            }
             if (this.item.del==1) {
-                solvedCheckBox.isChecked = true
+                solvedCheckBox.apply {
+                    isChecked = true
+                    jumpDrawablesToCurrentState()
+                }
             }
         }
     }
@@ -133,7 +127,8 @@ class MovieGalleryFragment : Fragment() {
         }
         override fun getItemCount(): Int = items.size
         override fun onBindViewHolder(holder: MovieHolder, position: Int) {
-            val item = items[position]
+            var item = items[position]
+            item.del = 1
             holder.bind(item)
         }
     }

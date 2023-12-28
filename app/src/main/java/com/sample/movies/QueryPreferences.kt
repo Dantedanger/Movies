@@ -7,21 +7,11 @@ import androidx.core.content.edit
 private const val PREF_SEARCH_QUERY = "searchQuery"
 private const val PREF_SEARCH_QUERY_YEAR = "searchQueryYear"
 object QueryPreferences {
-    fun getStoredQuery(context: Context):
-            String {
-        val prefs =
-            PreferenceManager.getDefaultSharedPreferences(context)
-        return prefs.getString(PREF_SEARCH_QUERY, "")!!
-    }
-    fun setStoredQuery(context: Context, query: String) {
-        PreferenceManager.getDefaultSharedPreferences(context)
-            .edit()
-            .putString(PREF_SEARCH_QUERY, query)
-            .apply()
-    }
-    fun getStoredQueryByYear(context: Context): String {
+    fun getStoredQueryByYear(context: Context): Pair<String, String> {
         val prefs = PreferenceManager.getDefaultSharedPreferences(context)
-        return prefs.getString(PREF_SEARCH_QUERY_YEAR, "")!!
+        val query = prefs.getString(PREF_SEARCH_QUERY, "")!!
+        val year = prefs.getString(PREF_SEARCH_QUERY_YEAR, "")!!
+        return Pair(query, year)
     }
     fun setStoredQueryByYear(context: Context, query: String, year:String) {
         PreferenceManager.getDefaultSharedPreferences(context)
