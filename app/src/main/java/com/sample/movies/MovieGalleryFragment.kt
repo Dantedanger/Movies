@@ -88,11 +88,15 @@ class MovieGalleryFragment : Fragment() {
         private val dateTextView: TextView = itemView.findViewById(R.id.year)
         val imageView: ImageView = itemView.findViewById(R.id.imageView)
         private val solvedCheckBox: CheckBox = view.findViewById(R.id.checkSolve)
+        private var isProgrammaticChange = false
         init {
             solvedCheckBox.setOnCheckedChangeListener { _, isChecked ->
-                item.del = 1
-                Log.d("MovieHolder", "item after: ${item.title}")
-                Log.d("MovieHolder", "item after: ${item.del}")
+                if (!isProgrammaticChange) {
+                    if (isChecked)
+                        movieGalleryViewModel.updateItem(item, 1)
+                    else
+                        movieGalleryViewModel.updateItem(item, 0)
+                }
             }
         }
         fun bind(item: Item) {
@@ -103,12 +107,14 @@ class MovieGalleryFragment : Fragment() {
                 .load(item.url)
                 .placeholder(R.drawable.bill_up_close)
                 .into(imageView)
+            isProgrammaticChange = true
             if (this.item.del==1) {
                 solvedCheckBox.apply {
                     isChecked = true
                     jumpDrawablesToCurrentState()
                 }
             }
+            isProgrammaticChange = false
         }
     }
 
@@ -127,8 +133,7 @@ class MovieGalleryFragment : Fragment() {
         }
         override fun getItemCount(): Int = items.size
         override fun onBindViewHolder(holder: MovieHolder, position: Int) {
-            var item = items[position]
-            item.del = 1
+            val item = items[position]
             holder.bind(item)
         }
     }
